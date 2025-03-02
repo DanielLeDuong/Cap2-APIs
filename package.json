@@ -1,0 +1,15 @@
+{
+  "name": "cap2_be",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "cap2",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "leduonghung",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
