@@ -6,6 +6,12 @@ var _sorts = require("~/utils/sorts.js");
 
 var _mongodb = require("~/config/mongodb");
 
+var _asyncExitHook = _interopRequireDefault(require("async-exit-hook"));
+
+require("dotenv/config");
+
+var _environment = require("~/config/environment");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 /**
@@ -15,16 +21,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
  */
 var START_SERVER = function START_SERVER() {
   var app = (0, _express["default"])();
-  var hostname = 'localhost';
-  var port = 8017;
+  var hostname = _environment.env.APP_HOST;
+  var port = _environment.env.APP_PORT;
   app.get('/', function (req, res) {
     res.end('<h1>Hello World!</h1><hr>');
   });
   app.listen(port, hostname, function () {
     // eslint-disable-next-line no-console
-    console.log("Hello HUNG, I am running at ".concat(hostname, ":").concat(port, "/"));
+    console.log("Hello ".concat(_environment.env.AUTHOR, ", I am running at ").concat(hostname, ":").concat(port, "/"));
   });
-}; // ()() la viet mot ham roi goi lai ham do luon
+  (0, _asyncExitHook["default"])(function (signal) {
+    (0, _mongodb.CLOSE_DB)();
+  });
+}; //()() la viet mot ham roi goi lai ham do luon
 
 
 (function _callee() {

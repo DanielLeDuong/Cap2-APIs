@@ -4,14 +4,14 @@
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
 
-const MONDODB_URI = 'mongodb+srv://mavoiem:248lseDE6x0oOYnW@cluster0.zzjcl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-const DATABASE_NAME = 'cap2-stock'
+
 
 import { MongoClient, ServerApiVersion } from "mongodb"
+import { env } from "~/config/environment"
 
 let stockDatabaseInstance = null
 
-const clientInstance = new MongoClient(MONDODB_URI, {
+const clientInstance = new MongoClient(env.MONDODB_URI, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
@@ -23,7 +23,7 @@ export const CONNECT_DB = async () => {
     await clientInstance.connect()
 
     //ket noi thanh cong thi lay database name
-    stockDatabaseInstance = clientInstance.db(DATABASE_NAME)
+    stockDatabaseInstance = clientInstance.db(env.DATABASE_NAME)
 }
 
 
@@ -31,4 +31,9 @@ export const CONNECT_DB = async () => {
 export const GET_DB = () => {
     if(!stockDatabaseInstance) throw new Error('Connect first!')
     return stockDatabaseInstance
+}
+
+//dong ket noi
+export const CLOSE_DB = async () => {
+    await stockDatabaseInstance.close()
 }

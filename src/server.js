@@ -6,17 +6,18 @@
 
 import express from 'express'
 import { mapOrder } from '~/utils/sorts.js'
-import { CONNECT_DB, GET_DB } from '~/config/mongodb'
-
-
+import { CLOSE_DB, CONNECT_DB, GET_DB } from '~/config/mongodb'
+import exitHook from 'async-exit-hook'
+import 'dotenv/config'
+import { env } from '~/config/environment'
 
 
 
 const START_SERVER = () => {
   const app = express()
   
-  const hostname = 'localhost'
-  const port = 8017
+  const hostname = env.APP_HOST
+  const port = env.APP_PORT
   
   app.get('/', (req, res) => {
     
@@ -25,12 +26,16 @@ const START_SERVER = () => {
   
   app.listen(port, hostname, () => {
     // eslint-disable-next-line no-console
-    console.log(`Hello HUNG, I am running at ${ hostname }:${ port }/`)
+    console.log(`Hello ${env.AUTHOR}, I am running at ${ hostname }:${ port }/`)
+  })
+
+  exitHook((signal) => {
+    CLOSE_DB()
   })
 
 }
 
-// ()() la viet mot ham roi goi lai ham do luon
+//()() la viet mot ham roi goi lai ham do luon
 (async () => {
   try {
     console.log('Connecting....')
